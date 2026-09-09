@@ -50,6 +50,37 @@ void serial_puts(const char* str) {
     }
 }
 
+void serial_putint(uint32_t n)
+{
+    char buf[11];
+    int i = 10;
+
+    buf[i] = '\0';
+
+    if (n == 0) {
+        serial_putc('0');
+        return;
+    }
+
+    while (n > 0) {
+        buf[--i] = '0' + (n % 10);
+        n /= 10;
+    }
+
+    serial_puts(&buf[i]);
+}
+
+void serial_puthex(uint32_t n)
+{
+    char hex[] = "0123456789ABCDEF";
+    int i;
+
+    serial_puts("0x");
+
+    for (i = 28; i >= 0; i -= 4)
+        serial_putc(hex[(n >> i) & 0xF]);
+}
+
 static int serial_received(void) {
     return inb(COM1 + 5) & 0x01;
 }

@@ -10,6 +10,7 @@ typedef short          int16_t;
 typedef char           int8_t;
 
 typedef uint32_t size_t;
+typedef uint32_t uintptr_t;
 
 #define NULL  ((void*)0)
 
