@@ -8,7 +8,7 @@ extern char __kernel_end;
 #define STACK_TOP 0x04000000
 #define ALIGNMENT 8
 
-typedef struct block{
+typedef struct block{       //Defining memory block
     size_t size;
     int free;
     struct block* next;
@@ -17,7 +17,7 @@ typedef struct block{
 static block_t* free_list=0;
 static block_t* stack_free_list=0;
 
-static size_t align_size(size_t size){
+static size_t align_size(size_t size){      //Aliging the size into 8-bit multiple
     size_t remainder=size%ALIGNMENT;
     
     if(remainder==0)
@@ -26,7 +26,7 @@ static size_t align_size(size_t size){
     return size+(ALIGNMENT-remainder);
 }
 
-static uintptr_t align_ptr(uintptr_t ptr){
+static uintptr_t align_ptr(uintptr_t ptr){      //Alligning the pointer into 8-bit multiple
     uintptr_t remainder=ptr%ALIGNMENT;
     
     if(remainder==0)
@@ -35,7 +35,7 @@ static uintptr_t align_ptr(uintptr_t ptr){
     return ptr+(ALIGNMENT-remainder);
 }
 
-static uintptr_t align_ptr_down(uintptr_t ptr){
+static uintptr_t align_ptr_down(uintptr_t ptr){     //Aligning the pointer down into 8-bit multiple
     uintptr_t remainder=ptr%ALIGNMENT;
     
     if(remainder==0)
@@ -44,7 +44,7 @@ static uintptr_t align_ptr_down(uintptr_t ptr){
     return ptr-remainder;
 }
 
-void memory_init(void){
+void memory_init(void){     //Initializing heap memory
     block_t* first;
     uintptr_t start;
 
@@ -60,24 +60,23 @@ void memory_init(void){
     free_list=first;
 }
 
-void stack_init(void)
-{
+void stack_init(void){      //Initializing stack memory
     block_t* first;
     uintptr_t start;
 
-    start = STACK_TOP - sizeof(block_t);
-    start = align_ptr_down(start);
+    start=STACK_TOP-sizeof(block_t);
+    start=align_ptr_down(start);
 
-    first = (block_t*)start;
+    first=(block_t*)start;
 
-    first->size = start - STACK_BOTTOM;
-    first->free = 1;
-    first->next = 0;
+    first->size=start-STACK_BOTTOM;
+    first->free=1;
+    first->next=0;
 
-    stack_free_list = first;
+    stack_free_list=first;
 }
 
-void* kmalloc(size_t size){
+void* kmalloc(size_t size){     //Heap memory allocation function
     block_t* current;
     block_t* new_block;
 
@@ -106,7 +105,7 @@ void* kmalloc(size_t size){
     return 0;
 }
 
-void* kstalloc(size_t size){
+void* kstalloc(size_t size){        //Stack memory allocation function
     block_t* current;
     block_t* new_block;
 
@@ -135,7 +134,7 @@ void* kstalloc(size_t size){
     return 0;
 }
 
-void kfree(void* ptr){
+void kfree(void* ptr){      //Heap memory deallocation function
     block_t* block;
 
     if(ptr==0)
@@ -146,7 +145,7 @@ void kfree(void* ptr){
 
     block_t* current=free_list;
 
-    while(current!=0 && current->next!=0){
+    while(current!=0 && current->next!=0){      //Optimizing heap memory by coalescing
         if(current->free && current->next->free){
             current->size+=sizeof(block_t)+current->next->size;
             current->next=current->next->next;
@@ -156,7 +155,7 @@ void kfree(void* ptr){
     }
 }
 
-void ksfree(void* ptr){
+void ksfree(void* ptr){     //Stack memory allocation function
     block_t* block;
 
     if(ptr==0)
@@ -167,7 +166,7 @@ void ksfree(void* ptr){
 
     block_t* current=stack_free_list;
 
-    while(current!=0 && current->next!=0){
+    while(current!=0 && current->next!=0){      //Optimizing stack memory by coalescing
         if(current->free && current->next->free){
             current->size+=sizeof(block_t)+current->next->size;
             current->next=current->next->next;
@@ -177,9 +176,9 @@ void ksfree(void* ptr){
     }
 }
 
-void memory_info(void* ptr){
+void memory_info(void* ptr){        //Displaying heap memory block information
 
-    block_t *block = (block_t *)((char *)ptr - sizeof(block_t));
+    block_t* block = (block_t*)((char*)ptr-sizeof(block_t));
 
     serial_puts("Size: ");
     serial_putint(block->size);
@@ -202,9 +201,9 @@ void memory_info(void* ptr){
     serial_puts("\n");
 }
 
-void stack_memory_info(void* ptr){
+void stack_memory_info(void* ptr){      //Displaying stack memory block information
 
-    block_t *block = (block_t *)((char *)ptr + sizeof(block_t));
+    block_t* block=(block_t*)((char*)ptr+sizeof(block_t));
 
     serial_puts("Size: ");
     serial_putint(block->size);
