@@ -189,15 +189,15 @@ void memory_info(void* ptr){        //Displaying heap memory block information
     serial_puts("\n");
 
     serial_puts("Block address: ");
-    serial_puthex((uint32_t)block);
+    serial_puthex((uintptr_t)block);
     serial_puts("\n");
 
     serial_puts("Data address: ");
-    serial_puthex((uint32_t)ptr);
+    serial_puthex((uintptr_t)ptr);
     serial_puts("\n");
 
     serial_puts("Next block: ");
-    serial_puthex((uint32_t)block->next);
+    serial_puthex((uintptr_t)block->next);
     serial_puts("\n");
 }
 
@@ -214,14 +214,14 @@ void stack_memory_info(void* ptr){      //Displaying stack memory block informat
     serial_puts("\n");
 
     serial_puts("Block address: ");
-    serial_puthex((uint32_t)block);
+    serial_puthex((uintptr_t)block);
     serial_puts("\n");
 
     serial_puts("Data address: ");
-    serial_puthex((uint32_t)ptr);
+    serial_puthex((uintptr_t)ptr);
     serial_puts("\n");
 
     serial_puts("Next block: ");
-    serial_puthex((uint32_t)block->next);
+    serial_puthex((uintptr_t)block->next);
     serial_puts("\n");
 }
