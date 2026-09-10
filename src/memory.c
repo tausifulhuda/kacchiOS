@@ -17,7 +17,7 @@ typedef struct block{       //Defining memory block
 static block_t* free_list=0;
 static block_t* stack_free_list=0;
 
-static size_t align_size(size_t size){      //Aliging the size into 8-bit multiple
+static size_t align_size(size_t size){      //Aligning the size into 8-bit multiple
     size_t remainder=size%ALIGNMENT;
     
     if(remainder==0)
@@ -26,7 +26,7 @@ static size_t align_size(size_t size){      //Aliging the size into 8-bit multip
     return size+(ALIGNMENT-remainder);
 }
 
-static uintptr_t align_ptr(uintptr_t ptr){      //Alligning the pointer into 8-bit multiple
+static uintptr_t align_ptr(uintptr_t ptr){      //Aligning the pointer into 8-bit multiple
     uintptr_t remainder=ptr%ALIGNMENT;
     
     if(remainder==0)
