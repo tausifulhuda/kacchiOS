@@ -9,8 +9,13 @@ typedef int            int32_t;
 typedef short          int16_t;
 typedef char           int8_t;
 
-typedef uint32_t size_t;
-typedef uint32_t uintptr_t;
+#ifdef __LP64__
+typedef unsigned long  size_t;
+typedef unsigned long  uintptr_t;
+#else
+typedef uint32_t       size_t;
+typedef uint32_t       uintptr_t;
+#endif
 
 #define NULL  ((void*)0)
 
